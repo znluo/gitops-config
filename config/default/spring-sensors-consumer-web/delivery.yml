@@ -1,0 +1,100 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-sensors-consumer-web
+  annotations:
+    kapp.k14s.io/update-strategy: fallback-on-replace
+    ootb.apps.tanzu.vmware.com/servicebinding-workload: "true"
+  labels:
+    app.kubernetes.io/part-of: my-java-web-app
+    apps.tanzu.vmware.com/workload-type: server
+    app.kubernetes.io/component: run
+    carto.run/workload-name: spring-sensors-consumer-web
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: run
+      app.kubernetes.io/part-of: my-java-web-app
+      apps.tanzu.vmware.com/workload-type: server
+      carto.run/workload-name: spring-sensors-consumer-web
+      conventions.apps.tanzu.vmware.com/framework: spring-boot
+      services.conventions.apps.tanzu.vmware.com/mysql: workload
+      services.conventions.apps.tanzu.vmware.com/rabbitmq: workload
+      tanzu.app.live.view: "true"
+      tanzu.app.live.view.application.actuator.port: "8081"
+      tanzu.app.live.view.application.flavours: spring-boot
+      tanzu.app.live.view.application.name: spring-sensors-consumer-web
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/minScale: "1"
+        boot.spring.io/actuator: http://:8081/actuator
+        boot.spring.io/version: 2.5.6
+        conventions.carto.run/applied-conventions: |-
+          spring-boot-convention/spring-boot
+          spring-boot-convention/spring-boot-graceful-shutdown
+          spring-boot-convention/spring-boot-web
+          spring-boot-convention/spring-boot-actuator
+          spring-boot-convention/service-intent-mysql
+          spring-boot-convention/service-intent-rabbitmq
+          appliveview-sample/app-live-view-appflavour-check
+          appliveview-sample/app-live-view-connector-boot
+          appliveview-sample/app-live-view-appflavours-boot
+          appliveview-sample/app-live-view-systemproperties
+        developer.conventions/target-containers: workload
+        services.conventions.apps.tanzu.vmware.com/mysql: mysql-connector-java/8.0.27
+        services.conventions.apps.tanzu.vmware.com/rabbitmq: amqp-client/5.12.0
+      labels:
+        app.kubernetes.io/component: run
+        app.kubernetes.io/part-of: my-java-web-app
+        apps.tanzu.vmware.com/workload-type: server
+        carto.run/workload-name: spring-sensors-consumer-web
+        conventions.apps.tanzu.vmware.com/framework: spring-boot
+        services.conventions.apps.tanzu.vmware.com/mysql: workload
+        services.conventions.apps.tanzu.vmware.com/rabbitmq: workload
+        tanzu.app.live.view: "true"
+        tanzu.app.live.view.application.actuator.port: "8081"
+        tanzu.app.live.view.application.flavours: spring-boot
+        tanzu.app.live.view.application.name: spring-sensors-consumer-web
+    spec:
+      containers:
+      - env:
+        - name: JAVA_TOOL_OPTIONS
+          value: -Dmanagement.endpoint.health.show-details=always -Dmanagement.endpoints.web.base-path="/actuator" -Dmanagement.endpoints.web.exposure.include=* -Dmanagement.server.port="8081" -Dserver.port="8080" -Dserver.shutdown.grace-period="24s"
+        image: harbor-tanzu.eng.vmware.com/workloads/workloads/spring-sensors-consumer-web-default@sha256:838342791af623a3ea746d49baf17e4e3d52bddf57f384101c7efc7b0157fa39
+        name: workload
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        resources: {}
+        securityContext:
+          runAsUser: 1000
+      serviceAccountName: default
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spring-sensors-consumer-web
+  labels:
+    app.kubernetes.io/part-of: my-java-web-app
+    apps.tanzu.vmware.com/workload-type: server
+    app.kubernetes.io/component: run
+    carto.run/workload-name: spring-sensors-consumer-web
+spec:
+  selector:
+    app.kubernetes.io/component: run
+    app.kubernetes.io/part-of: my-java-web-app
+    apps.tanzu.vmware.com/workload-type: server
+    carto.run/workload-name: spring-sensors-consumer-web
+    conventions.apps.tanzu.vmware.com/framework: spring-boot
+    services.conventions.apps.tanzu.vmware.com/mysql: workload
+    services.conventions.apps.tanzu.vmware.com/rabbitmq: workload
+    tanzu.app.live.view: "true"
+    tanzu.app.live.view.application.actuator.port: "8081"
+    tanzu.app.live.view.application.flavours: spring-boot
+    tanzu.app.live.view.application.name: spring-sensors-consumer-web
+  ports:
+  - targetPort: 8080
+    port: 8080
+    name: http
+

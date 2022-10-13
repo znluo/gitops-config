@@ -1,0 +1,22 @@
+apiVersion: servicebinding.io/v1alpha3
+kind: ServiceBinding
+metadata:
+  name: spring-sensors-consumer-web-rmq
+  annotations:
+    autoscaling.knative.dev/minScale: "1"
+  labels:
+    app.kubernetes.io/part-of: my-java-web-app
+    apps.tanzu.vmware.com/workload-type: server
+    app.kubernetes.io/component: run
+    carto.run/workload-name: spring-sensors-consumer-web
+spec:
+  name: rmq
+  service:
+    apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+    kind: ResourceClaim
+    name: rmq-1
+  workload:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: spring-sensors-consumer-web
+
