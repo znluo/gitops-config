@@ -31,7 +31,7 @@ spec:
           appliveview-sample/app-live-view-connector-boot
           appliveview-sample/app-live-view-appflavours-boot
           appliveview-sample/app-live-view-systemproperties
-        developer.apps.tanzu.vmware.com/image-source-digest: harbor-tanzu.eng.vmware.com/workloads/hugo-staff-health-app-cd:latest@sha256:d593aa65cd68ba05a1924c946a31199deae43c240d81015aca54232269f275bd
+        developer.apps.tanzu.vmware.com/image-source-digest: harbor-tanzu.eng.vmware.com/workloads/hugo-staff-health-app-cd:latest@sha256:e71b5c1e097dcbe9ec37186a8198d729fdbd74effbccdf51cf8c84acc13646a1
         developer.conventions/target-containers: workload
       labels:
         app.kubernetes.io/component: run
@@ -48,7 +48,7 @@ spec:
       - env:
         - name: JAVA_TOOL_OPTIONS
           value: -Dmanagement.endpoint.health.probes.add-additional-paths="true" -Dmanagement.endpoint.health.show-details=always -Dmanagement.endpoints.web.base-path="/actuator" -Dmanagement.endpoints.web.exposure.include=* -Dmanagement.health.probes.enabled="true" -Dmanagement.server.port="8081" -Dserver.port="8080" -Dserver.shutdown.grace-period="24s"
-        image: harbor-tanzu.eng.vmware.com/workloads/workloads/hugo-staff-health-app-cd-default@sha256:11181a6e57d17f70b5510745c5dc5a1fd3cddacb41811f6a7a05bf7d946c0e3e
+        image: harbor-tanzu.eng.vmware.com/workloads/workloads/hugo-staff-health-app-cd-default@sha256:6aa3597873e1b9d4e09f78226619c11499a41bebc49fcce8a34fe5f5ff9a7bed
         livenessProbe:
           httpGet:
             path: /livez
