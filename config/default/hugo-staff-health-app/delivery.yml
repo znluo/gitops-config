@@ -30,7 +30,7 @@ spec:
           appliveview-sample/app-live-view-connector-boot
           appliveview-sample/app-live-view-appflavours-boot
           appliveview-sample/app-live-view-systemproperties
-        developer.apps.tanzu.vmware.com/image-source-digest: harbor-tanzu.eng.vmware.com/workloads/hugo-staff-health-app:latest@sha256:27b050d13b77211c6290c944d938ae446dff1a9bff4f406a6b69809c61726a22
+        developer.apps.tanzu.vmware.com/image-source-digest: harbor-tanzu.eng.vmware.com/workloads/hugo-staff-health-app:latest@sha256:b557e759d1b6eedd8a23c257961667c2c50ec0a697cb73e140ab67eb9635b250
         developer.conventions/target-containers: workload
       labels:
         app.kubernetes.io/component: run
@@ -47,7 +47,7 @@ spec:
       - env:
         - name: JAVA_TOOL_OPTIONS
           value: -Dmanagement.endpoint.health.show-details=always -Dmanagement.endpoints.web.base-path="/actuator" -Dmanagement.endpoints.web.exposure.include=* -Dmanagement.server.port="8081" -Dserver.port="8080" -Dserver.shutdown.grace-period="24s"
-        image: harbor-tanzu.eng.vmware.com/workloads/workloads/hugo-staff-health-app-default@sha256:f05d056258a56062e4f21e316d0ca67c7c398a8eb8c4d7c25714046c4d09b3b7
+        image: harbor-tanzu.eng.vmware.com/workloads/workloads/hugo-staff-health-app-default@sha256:92846749481aeba1d30e10380e9b993265347da014aacf0e08b262d906962ef4
         name: workload
         ports:
         - containerPort: 8080
