@@ -15,48 +15,52 @@ spec:
     matchLabels:
       app.kubernetes.io/component: run
       app.kubernetes.io/part-of: my-java-web-app
+      apps.tanzu.vmware.com/auto-configure-actuators: "false"
       apps.tanzu.vmware.com/workload-type: worker
       carto.run/workload-name: spring-sensors-producer
-      conventions.apps.tanzu.vmware.com/framework: spring-boot
-      services.conventions.apps.tanzu.vmware.com/rabbitmq: workload
+      conventions.carto.run/framework: spring-boot
+      services.conventions.carto.run/rabbitmq: workload
       tanzu.app.live.view: "true"
-      tanzu.app.live.view.application.actuator.port: "8081"
+      tanzu.app.live.view.application.actuator.path: actuator
+      tanzu.app.live.view.application.actuator.port: "8080"
       tanzu.app.live.view.application.flavours: spring-boot
       tanzu.app.live.view.application.name: spring-sensors-producer
   template:
     metadata:
       annotations:
         autoscaling.knative.dev/minScale: "1"
-        boot.spring.io/actuator: http://:8081/actuator
         boot.spring.io/version: 2.5.6
         conventions.carto.run/applied-conventions: |-
+          spring-boot-convention/auto-configure-actuators-check
           spring-boot-convention/spring-boot
           spring-boot-convention/spring-boot-graceful-shutdown
           spring-boot-convention/spring-boot-web
           spring-boot-convention/spring-boot-actuator
+          spring-boot-convention/app-live-view-appflavour-check
+          spring-boot-convention/app-live-view-connector-boot
+          spring-boot-convention/app-live-view-appflavours-boot
           spring-boot-convention/service-intent-rabbitmq
           appliveview-sample/app-live-view-appflavour-check
-          appliveview-sample/app-live-view-connector-boot
-          appliveview-sample/app-live-view-appflavours-boot
-          appliveview-sample/app-live-view-systemproperties
         developer.conventions/target-containers: workload
-        services.conventions.apps.tanzu.vmware.com/rabbitmq: amqp-client/5.12.0
+        services.conventions.carto.run/rabbitmq: amqp-client/5.12.0
       labels:
         app.kubernetes.io/component: run
         app.kubernetes.io/part-of: my-java-web-app
+        apps.tanzu.vmware.com/auto-configure-actuators: "false"
         apps.tanzu.vmware.com/workload-type: worker
         carto.run/workload-name: spring-sensors-producer
-        conventions.apps.tanzu.vmware.com/framework: spring-boot
-        services.conventions.apps.tanzu.vmware.com/rabbitmq: workload
+        conventions.carto.run/framework: spring-boot
+        services.conventions.carto.run/rabbitmq: workload
         tanzu.app.live.view: "true"
-        tanzu.app.live.view.application.actuator.port: "8081"
+        tanzu.app.live.view.application.actuator.path: actuator
+        tanzu.app.live.view.application.actuator.port: "8080"
         tanzu.app.live.view.application.flavours: spring-boot
         tanzu.app.live.view.application.name: spring-sensors-producer
     spec:
       containers:
       - env:
         - name: JAVA_TOOL_OPTIONS
-          value: -Dmanagement.endpoint.health.show-details=always -Dmanagement.endpoints.web.base-path="/actuator" -Dmanagement.endpoints.web.exposure.include=* -Dmanagement.server.port="8081" -Dserver.port="8080" -Dserver.shutdown.grace-period="24s"
+          value: -Dserver.port="8080" -Dserver.shutdown.grace-period="24s"
         image: harbor-tanzu.eng.vmware.com/workloads/workloads/spring-sensors-producer-default@sha256:aa2f3b9eea0c291a28940fb0011a67b85f2068461c49fdfd3516d12b5cefa50e
         name: workload
         ports:
